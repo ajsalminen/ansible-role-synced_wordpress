@@ -1,0 +1,4 @@
+---
+# defaults file for ajsalminen.drupal_basic
+drupal_basic_source_site_dir: "{{drupal_basic_site_dir}}"
+drupal_basic_repo: "ssh://{{drupal_basic_source.host}}{{drupal_basic_source.dir}}"

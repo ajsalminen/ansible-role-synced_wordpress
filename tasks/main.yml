@@ -1,0 +1,11 @@
+---
+# tasks file for ajsalminen.drupal_basic
+
+
+# for some reason this does not replace (manually running works)
+# - name: Replace site name
+  # debug: msg="wp --allow-root search-replace {{wordpress_db.site_name}} {{site_name}} chdir={{wordpress_webroot}}"
+  # debug: var=item
+  # shell: /usr/local/bin/wp --allow-root search-replace {{wordpress_db.site_name}} {{site_name}} chdir={{wordpress_webroot}}
+  # when:  item.changed  == True and wordpress_db.name == item.name # and wordpress_db.site_name != site_name
+  # with_items: mysql_sync_import.results
