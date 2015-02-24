@@ -117,7 +117,8 @@ galaxy_info:
   #- system
   #- web
 dependencies:
-    - ajsalminen.wordpress
+    - role: ajsalminen.wordpress
+      apache_vhost_no_create_webroot: true
     - role: ajsalminen.mysql_sync
       mysql_sync_config:
         -   source: "{{ wordpress_db.host|default(synced_wordpress.host) }}"
