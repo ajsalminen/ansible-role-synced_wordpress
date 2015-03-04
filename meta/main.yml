@@ -118,14 +118,18 @@ galaxy_info:
   #- web
 dependencies:
     - role: ajsalminen.wordpress
-      apache_vhost_no_create_webroot: true
+      apache_vhost_no_create_webroot: synced_wordpress_sync|default(false)
+      
     - role: ajsalminen.mysql_sync
       mysql_sync_config:
         -   source: "{{ wordpress_db.host|default(synced_wordpress.host) }}"
             database: "{{ wordpress_db.name }}"
+      when: synced_wordpress_sync|default(false)
+      
     - role: ajsalminen.file_sync
       file_sync_config:
         - source: "{{synced_wordpress.host}}"
           dirs:
             - source: "{{synced_wordpress.dir}}/wp-content/uploads/"
               target: "{{wordpress_webroot}}/wp-content/uploads/"
+      when: synced_wordpress_sync|default(false)
