@@ -1,11 +1,11 @@
 ---
 # tasks file for ajsalminen.drupal_basic
 
+- name: Set wp_local_site_name
+  set_fact:
+    wp_local_site_name: "{{ site_name ~ local_test_environment|default('') }}"
+  when: site_name != '000-default'
 
-# for some reason this does not replace (manually running works)
-# - name: Replace site name
-  # debug: msg="wp --allow-root search-replace {{wordpress_db.site_name}} {{site_name}} chdir={{wordpress_webroot}}"
-  # debug: var=item
-  # shell: /usr/local/bin/wp --allow-root search-replace {{wordpress_db.site_name}} {{site_name}} chdir={{wordpress_webroot}}
-  # when:  item.changed  == True and wordpress_db.name == item.name # and wordpress_db.site_name != site_name
-  # with_items: mysql_sync_import.results
+- name: Replace site name
+  shell: /usr/local/bin/wp --allow-root search-replace --skip-columns=guid --url={{wordpress_db.site_name}} {{wordpress_db.site_name}} {{wp_local_site_name}} chdir={{wordpress_webroot}}
+  when: wp_present.stat.exists == false and wordpress_db.site_name is defined and wordpress_db.site_name != wp_local_site_name
