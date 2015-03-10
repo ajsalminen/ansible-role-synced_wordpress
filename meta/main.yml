@@ -117,6 +117,8 @@ galaxy_info:
   #- system
   #- web
 dependencies:
+    - role: wp-cli
+
     - role: ajsalminen.wordpress
       apache_vhost_no_create_webroot: synced_wordpress_sync|default(false)
       
