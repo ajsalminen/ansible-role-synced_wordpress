@@ -1,11 +1,13 @@
 ---
 # tasks file for ajsalminen.drupal_basic
 
-- name: Set wp_local_site_name
+- name: Set wp_new_site_name
   set_fact:
-    wp_local_site_name: "{{ site_name ~ local_test_environment|default('') }}"
+    wp_new_site_name: "{{ synced_wordpress.new_site_name|default(wordpress_db.site_name) ~ local_test_environment|default('') }}"
   when: site_name != '000-default'
 
+#- debug: msg="/usr/local/bin/wp --allow-root search-replace --network --url={{wordpress_db.site_name}} --skip-columns=guid {{wordpress_db.site_name}} {{wp_new_site_name}} chdir={{wordpress_webroot}}"
+
 - name: Replace site name
-  shell: /usr/local/bin/wp --allow-root search-replace --skip-columns=guid --url={{wordpress_db.site_name}} {{wordpress_db.site_name}} {{wp_local_site_name}} chdir={{wordpress_webroot}}
-  when: wp_present.stat.exists == false and wordpress_db.site_name is defined and wordpress_db.site_name != wp_local_site_name
+  shell: /usr/local/bin/wp --allow-root search-replace --network --url={{wordpress_db.site_name}} --skip-columns=guid {{wordpress_db.site_name}} {{wp_new_site_name}} chdir={{wordpress_webroot}}
+  when: wordpress_db.site_name is defined and wordpress_db.site_name != wp_new_site_name
