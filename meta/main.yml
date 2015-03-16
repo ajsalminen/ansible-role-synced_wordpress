@@ -126,7 +126,7 @@ dependencies:
       mysql_sync_config:
         -   source: "{{ wordpress_db.host|default(synced_wordpress.host) }}"
             database: "{{ wordpress_db.name }}"
-      when: synced_wordpress is defined
+      when: synced_wordpress is defined and (mysql_sync|default(false) or synced_wordpress.mysql_sync|default(false))
       
     - role: ajsalminen.file_sync
       file_sync_config:
