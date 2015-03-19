@@ -6,8 +6,12 @@
     wp_new_site_name: "{{ synced_wordpress.new_site_name|default(wordpress_db.site_name) ~ local_test_environment|default('') }}"
   when: site_name != '000-default'
 
-#- debug: msg="/usr/local/bin/wp --allow-root search-replace --network --url={{wordpress_db.site_name}} --skip-columns=guid {{wordpress_db.site_name}} {{wp_new_site_name}} chdir={{wordpress_webroot}}"
+- name: Find out if content sync is enabled
+  set_fact:
+    do_wp_content_sync: "{{ synced_wordpress is defined and (wp_content_sync_sites[site_name]|default(false) or wp_content_sync|default(false)) }}"
+
+#- debug: var=do_wp_content_sync
 
 - name: Replace site name
   shell: /usr/local/bin/wp --allow-root search-replace --network --url={{wordpress_db.site_name}} --skip-columns=guid {{wordpress_db.site_name}} {{wp_new_site_name}} chdir={{wordpress_webroot}}
-  when: wordpress_db.site_name is defined and wordpress_db.site_name != wp_new_site_name
+  when: do_wp_content_sync and wordpress_db.site_name is defined and wordpress_db.site_name != wp_new_site_name
