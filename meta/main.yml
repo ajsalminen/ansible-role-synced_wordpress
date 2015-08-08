@@ -138,3 +138,5 @@ dependencies:
             - source: "{{synced_wordpress.dir}}/wp-content/uploads/"
               target: "{{wordpress_webroot}}/wp-content/uploads/"
       when: synced_wordpress is defined and (site_content_sync_sites[site_name]|default(false) or site_content_sync|default(false))
+
+    - role: kifi.wp_role_capabilities
