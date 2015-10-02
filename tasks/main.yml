@@ -10,8 +10,15 @@
   set_fact:
     do_site_content_sync: "{{ synced_wordpress is defined and (site_content_sync_sites[site_name]|default(false) or site_content_sync|default(false)) }}"
 
-#- debug: var=do_site_content_sync
-
 - name: Replace site name
   shell: /usr/local/bin/wp --allow-root search-replace --network --url={{wordpress_db.site_name}} --skip-columns=guid {{wordpress_db.site_name}} {{wp_new_site_name}} chdir={{wordpress_webroot}}
   when: do_site_content_sync|bool and wordpress_db.site_name is defined and wordpress_db.site_name != wp_new_site_name
+
+- name: Remove Wordpress role capabilities
+  shell: >
+    /usr/local/bin/wp --allow-root
+    cap remove {{item.key}} {{item.value | join(" ")}}
+    chdir={{wordpress_webroot}}
+  with_dict: synced_wordpress_role_capabilities_removed
+  register: result
+  changed_when: result.stdout.find('Removed 0 capabilities') == -1

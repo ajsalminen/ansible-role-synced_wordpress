@@ -1,3 +1,6 @@
 ---
 # defaults file for ajsalminen.drupal_basic
 apache_vhost_no_create_webroot: True
+
+synced_wordpress_role_capabilities_removed:
+  administrator: [ update_plugins, update_themes, update_core ]
