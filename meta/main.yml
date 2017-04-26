@@ -121,6 +121,7 @@ dependencies:
 
     - role: ajsalminen.wordpress
       apache_vhost_no_create_webroot: synced_wordpress is defined
+      wordpress_bedrock: "{{ synced_wordpress_bedrock }}"
 
       # To enable content (database & wp-content) sync for non-vagrant hosts, set extra vars when running ansible-playbook. Example:
       # ansible-playbook site.yml -l host -e '{"site_content_sync_sites":{"site1": true, "site2": false}}'
@@ -135,6 +136,6 @@ dependencies:
       file_sync_config:
         - source: "{{synced_wordpress.host}}"
           dirs:
-            - source: "{{synced_wordpress.dir}}/wp-content/uploads/"
-              target: "{{wordpress_webroot}}/wp-content/uploads/"
+            - source: "{{synced_wordpress.dir}}/{{synced_wordpress_uploads_path}}/"
+              target: "{{wordpress_webroot}}/{{synced_wordpress_uploads_path}}/"
       when: synced_wordpress is defined and (site_content_sync_sites[site_name]|default(false) or site_content_sync|default(false))
