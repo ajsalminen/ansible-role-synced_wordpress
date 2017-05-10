@@ -16,7 +16,7 @@
 
 - name: Remove Wordpress role capabilities
   shell: >
-    /usr/local/bin/wp --allow-root cap remove {{item.key}} {{item.value | join(" ")}}
+    /usr/local/bin/wp --allow-root --url="http://{{ wp_new_site_name }}" cap remove {{item.key}} {{item.value | join(" ")}}
     chdir={{wordpress_webroot}}
   with_dict: synced_wordpress_role_capabilities_removed
   register: result
